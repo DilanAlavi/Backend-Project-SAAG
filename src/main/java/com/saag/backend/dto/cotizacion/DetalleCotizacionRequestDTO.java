@@ -13,6 +13,6 @@ public class DetalleCotizacionRequestDTO {
     private Integer idProducto;
     private Integer cantidad;
     private Double precioUnitario;
+    private Double subtotal;
 }
 
-private Double subtotal;
