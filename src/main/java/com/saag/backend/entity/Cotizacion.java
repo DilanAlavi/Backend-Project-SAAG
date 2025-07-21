@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "cotizaciones")
@@ -35,4 +36,7 @@ public class Cotizacion {
     public enum Estado {
         PENDIENTE, ENVIADA, CANCELADA
     }
+
+    @OneToMany(mappedBy = "cotizacion", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetalleCotizacion> detalles;
 }

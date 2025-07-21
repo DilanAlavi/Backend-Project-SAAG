@@ -5,14 +5,14 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CotizacionRequestDTO {
-    private Integer idUsuario;
-    private String nombreCompleto;
-    private List<DetalleCotizacionRequestDTO> detalles;
+public class DetalleCotizacionRequestDTO {
+    private Integer idProducto;
+    private Integer cantidad;
+    private Double precioUnitario;
 }
+
+private Double subtotal;

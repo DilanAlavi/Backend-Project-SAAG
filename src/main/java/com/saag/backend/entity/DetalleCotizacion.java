@@ -2,7 +2,10 @@ package com.saag.backend.entity;
 
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 @Entity
 @Table(name = "detalle_cotizaciones")
@@ -13,7 +16,7 @@ import lombok.*;
 public class DetalleCotizacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idDetalle;
+    private Integer idDetalleCotizacion;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_cotizacion")

@@ -2,7 +2,10 @@ package com.saag.backend.entity;
 
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 @Entity
 @Table(name = "productos")
@@ -15,28 +18,23 @@ public class Producto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idProducto;
 
-    @Column(nullable = false, length = 200)
-    private String nombreProducto;
+    @Column(nullable = false, length = 100)
+    private String nombre;
 
-    @Column(columnDefinition = "TEXT")
-    private String descripcionProducto;
+    @Column(nullable = false, length = 255)
+    private String descripcion;
 
     @Column(nullable = false)
     private Double precio;
 
-    private String imagenUrl;
+    @Column(nullable = false)
+    private Integer stock;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_categoria")
     private Categoria categoria;
 
-    @ManyToOne
-    @JoinColumn(name = "id_subcategoria")
-    private Subcategoria subcategoria;
-
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "id_marca")
     private Marca marca;
-
-    private Boolean activo = true;
 }
