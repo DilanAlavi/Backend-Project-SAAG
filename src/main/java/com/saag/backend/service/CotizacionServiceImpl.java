@@ -2,6 +2,7 @@ package com.saag.backend.service;
 
 import com.saag.backend.dto.cotizacion.CotizacionRequestDTO;
 import com.saag.backend.dto.cotizacion.CotizacionResponseDTO;
+import com.saag.backend.dto.cotizacion.DetalleCotizacionRequestDTO;
 import com.saag.backend.entity.Cotizacion;
 import com.saag.backend.entity.DetalleCotizacion;
 import com.saag.backend.entity.Producto;
@@ -52,7 +53,7 @@ public class CotizacionServiceImpl implements CotizacionService {
 
         List<DetalleCotizacion> detalles = cotizacionRequestDTO.getDetalles().stream()
                 .map(detalleDto -> {
-                    Producto producto = productoRepository.findById(detalleDto.getIdProducto())
+                    Producto producto = productoRepository.findById(detalleDto.getIdProducto().longValue())
                             .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
                     DetalleCotizacion detalle = new DetalleCotizacion();
                     detalle.setCotizacion(savedCotizacion);
@@ -79,7 +80,9 @@ public class CotizacionServiceImpl implements CotizacionService {
     @Override
     public List<CotizacionResponseDTO> getAllCotizaciones() {
         List<Cotizacion> cotizaciones = cotizacionRepository.findAll();
-        return cotizacionMapper.toDto(cotizaciones);
+        return cotizaciones.stream()
+                .map(cotizacionMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -93,14 +96,18 @@ public class CotizacionServiceImpl implements CotizacionService {
 
         existingCotizacion.setUsuario(usuario);
         existingCotizacion.setNombreCompleto(cotizacionRequestDTO.getNombreCompleto());
-        existingCotizacion.setTotalCotizacion(cotizacionRequestDTO.getTotalCotizacion());
-        // No se actualiza fechaCotizacion ni estado directamente desde el DTO de request
+        
+        // Calcular el total de la cotización basado en los detalles
+        double total = cotizacionRequestDTO.getDetalles().stream()
+                .mapToDouble(DetalleCotizacionRequestDTO::getSubtotal)
+                .sum();
+        existingCotizacion.setTotalCotizacion(total);
 
         // Eliminar detalles existentes y guardar los nuevos
         detalleCotizacionRepository.deleteAll(existingCotizacion.getDetalles());
         List<DetalleCotizacion> nuevosDetalles = cotizacionRequestDTO.getDetalles().stream()
                 .map(detalleDto -> {
-                    Producto producto = productoRepository.findById(detalleDto.getIdProducto())
+                    Producto producto = productoRepository.findById(detalleDto.getIdProducto().longValue())
                             .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
                     DetalleCotizacion detalle = new DetalleCotizacion();
                     detalle.setCotizacion(existingCotizacion);

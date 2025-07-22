@@ -11,4 +11,5 @@ import lombok.Builder;
 @Builder
 public class CategoriaRequestDTO {
     private String nombre;
+    private Boolean activa;
 }

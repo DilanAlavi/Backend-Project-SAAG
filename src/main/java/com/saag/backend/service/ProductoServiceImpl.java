@@ -5,10 +5,12 @@ import com.saag.backend.dto.producto.ProductoResponseDTO;
 import com.saag.backend.entity.Categoria;
 import com.saag.backend.entity.Marca;
 import com.saag.backend.entity.Producto;
+import com.saag.backend.entity.Subcategoria;
 import com.saag.backend.mapper.ProductoMapper;
 import com.saag.backend.repository.CategoriaRepository;
 import com.saag.backend.repository.MarcaRepository;
 import com.saag.backend.repository.ProductoRepository;
+import com.saag.backend.repository.SubcategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,16 +32,29 @@ public class ProductoServiceImpl implements ProductoService {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
+    @Autowired
+    private SubcategoriaRepository subcategoriaRepository;
+
     @Override
     public ProductoResponseDTO createProducto(ProductoRequestDTO productoRequestDTO) {
-        Marca marca = marcaRepository.findById(productoRequestDTO.getIdMarca())
+        Marca marca = marcaRepository.findById(productoRequestDTO.getIdMarca().intValue())
                 .orElseThrow(() -> new RuntimeException("Marca no encontrada"));
-        Categoria categoria = categoriaRepository.findById(productoRequestDTO.getIdCategoria())
+        Categoria categoria = categoriaRepository.findById(productoRequestDTO.getIdCategoria().intValue())
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-
-        Producto producto = productoMapper.toEntity(productoRequestDTO);
-        producto.setMarca(marca);
+        Subcategoria subcategoria = null;
+        if (productoRequestDTO.getIdSubcategoria() != null) {
+            subcategoria = subcategoriaRepository.findById(productoRequestDTO.getIdSubcategoria().intValue())
+                .orElse(null);
+        }
+        Producto producto = new Producto();
+        producto.setNombreProducto(productoRequestDTO.getNombreProducto());
+        producto.setDescripcionProducto(productoRequestDTO.getDescripcionProducto());
+        producto.setPrecio(productoRequestDTO.getPrecio());
+        producto.setImagenUrl(productoRequestDTO.getImagenUrl());
         producto.setCategoria(categoria);
+        producto.setSubcategoria(subcategoria);
+        producto.setMarca(marca);
+        producto.setActivo(productoRequestDTO.getActivo() != null ? productoRequestDTO.getActivo() : true);
         Producto savedProducto = productoRepository.save(producto);
         return productoMapper.toDto(savedProducto);
     }
@@ -63,18 +78,23 @@ public class ProductoServiceImpl implements ProductoService {
         Producto existingProducto = productoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
-        Marca marca = marcaRepository.findById(productoRequestDTO.getIdMarca())
+        Marca marca = marcaRepository.findById(productoRequestDTO.getIdMarca().intValue())
                 .orElseThrow(() -> new RuntimeException("Marca no encontrada"));
-        Categoria categoria = categoriaRepository.findById(productoRequestDTO.getIdCategoria())
+        Categoria categoria = categoriaRepository.findById(productoRequestDTO.getIdCategoria().intValue())
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-
+        Subcategoria subcategoria = null;
+        if (productoRequestDTO.getIdSubcategoria() != null) {
+            subcategoria = subcategoriaRepository.findById(productoRequestDTO.getIdSubcategoria().intValue())
+                .orElse(null);
+        }
         existingProducto.setNombreProducto(productoRequestDTO.getNombreProducto());
-        existingProducto.setDescripcion(productoRequestDTO.getDescripcion());
+        existingProducto.setDescripcionProducto(productoRequestDTO.getDescripcionProducto());
         existingProducto.setPrecio(productoRequestDTO.getPrecio());
-        existingProducto.setMarca(marca);
+        existingProducto.setImagenUrl(productoRequestDTO.getImagenUrl());
         existingProducto.setCategoria(categoria);
-        existingProducto.setStock(productoRequestDTO.getStock());
-
+        existingProducto.setSubcategoria(subcategoria);
+        existingProducto.setMarca(marca);
+        existingProducto.setActivo(productoRequestDTO.getActivo() != null ? productoRequestDTO.getActivo() : true);
         Producto updatedProducto = productoRepository.save(existingProducto);
         return productoMapper.toDto(updatedProducto);
     }

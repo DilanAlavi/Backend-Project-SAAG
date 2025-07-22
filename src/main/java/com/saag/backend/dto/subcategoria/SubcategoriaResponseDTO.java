@@ -11,7 +11,8 @@ import lombok.Builder;
 @Builder
 public class SubcategoriaResponseDTO {
     private Integer idSubcategoria;
-    private String nombre;
+    private String nombreSubcategoria;
+    private Boolean activa;
     private Integer idCategoria;
     private String nombreCategoria;
 }

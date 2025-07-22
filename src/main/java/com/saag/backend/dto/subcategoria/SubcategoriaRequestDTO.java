@@ -12,4 +12,5 @@ import lombok.Builder;
 public class SubcategoriaRequestDTO {
     private String nombre;
     private Integer idCategoria;
+    private Boolean activa;
 }

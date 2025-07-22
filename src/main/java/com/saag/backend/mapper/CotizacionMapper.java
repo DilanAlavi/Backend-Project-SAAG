@@ -9,7 +9,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring", uses = {DetalleCotizacionMapper.class})
 public interface CotizacionMapper {
-    CotizacionMapper INSTANCE = Mappers.getMapper(CotizacionMapper.class);
+
 
     @Mapping(source = "idUsuario", target = "usuario.idUsuario")
     Cotizacion toEntity(CotizacionRequestDTO cotizacionRequestDTO);

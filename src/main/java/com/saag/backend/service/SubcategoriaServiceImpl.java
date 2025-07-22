@@ -48,11 +48,12 @@ public class SubcategoriaServiceImpl implements SubcategoriaService {
     @Override
     public SubcategoriaResponseDTO updateSubcategoria(Integer id, SubcategoriaRequestDTO subcategoriaRequestDTO) {
         Subcategoria existingSubcategoria = subcategoriaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Subcategoría no encontrada con ID: " + id));
-        Categoria categoria = categoriaRepository.findById(subcategoriaRequestDTO.getIdCategoria())
-                .orElseThrow(() -> new RuntimeException("Categoría no encontrada con ID: " + subcategoriaRequestDTO.getIdCategoria()));
+                .orElseThrow(() -> new RuntimeException("Subcategoría no encontrada"));
 
-        existingSubcategoria.setNombre(subcategoriaRequestDTO.getNombre());
+        Categoria categoria = categoriaRepository.findById(subcategoriaRequestDTO.getIdCategoria())
+                .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+
+        existingSubcategoria.setNombreSubcategoria(subcategoriaRequestDTO.getNombre());
         existingSubcategoria.setCategoria(categoria);
 
         Subcategoria updatedSubcategoria = subcategoriaRepository.save(existingSubcategoria);

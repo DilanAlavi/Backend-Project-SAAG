@@ -38,12 +38,16 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui.html",
-                                "/api/auth/**",    // Endpoints de autenticación públicos
-                                "/api/usuarios",   // POST para crear usuario público
+                                "/api/auth/**",
+                                "/api/usuarios",
+                                "/api/categorias/**",
+                                "/api/productos/**",
+                                "/api/marcas/**",
+                                "/api/subcategorias/**",
+                                "/api/cotizaciones/**",
                                 "/error"
                         ).permitAll()
-                        .requestMatchers("/api/usuarios/**").hasAnyRole("ADMIN", "USUARIO")
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

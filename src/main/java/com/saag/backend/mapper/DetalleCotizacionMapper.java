@@ -9,12 +9,12 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface DetalleCotizacionMapper {
-    DetalleCotizacionMapper INSTANCE = Mappers.getMapper(DetalleCotizacionMapper.class);
+
 
     @Mapping(source = "idProducto", target = "producto.idProducto")
     DetalleCotizacion toEntity(DetalleCotizacionRequestDTO detalleCotizacionRequestDTO);
 
     @Mapping(source = "producto.idProducto", target = "idProducto")
-    @Mapping(source = "producto.nombre", target = "nombreProducto")
+    @Mapping(source = "producto.nombreProducto", target = "nombreProducto")
     DetalleCotizacionResponseDTO toDto(DetalleCotizacion detalleCotizacion);
 }

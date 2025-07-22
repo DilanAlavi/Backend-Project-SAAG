@@ -9,9 +9,10 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface MarcaMapper {
-    MarcaMapper INSTANCE = Mappers.getMapper(MarcaMapper.class);
 
+    @Mapping(source = "nombre", target = "nombreMarca")
     Marca toEntity(MarcaRequestDTO marcaRequestDTO);
 
+    @Mapping(source = "nombreMarca", target = "nombre")
     MarcaResponseDTO toDto(Marca marca);
 }

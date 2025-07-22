@@ -9,12 +9,13 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface SubcategoriaMapper {
-    SubcategoriaMapper INSTANCE = Mappers.getMapper(SubcategoriaMapper.class);
 
     @Mapping(target = "categoria.idCategoria", source = "idCategoria")
     Subcategoria toEntity(SubcategoriaRequestDTO subcategoriaRequestDTO);
 
     @Mapping(target = "idCategoria", source = "categoria.idCategoria")
-    @Mapping(target = "nombreCategoria", source = "categoria.nombre")
+    @Mapping(target = "nombreCategoria", source = "categoria.nombreCategoria")
+    @Mapping(target = "activa", source = "activa")
+    @Mapping(target = "nombreSubcategoria", source = "nombreSubcategoria")
     SubcategoriaResponseDTO toDto(Subcategoria subcategoria);
 }

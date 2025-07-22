@@ -42,8 +42,10 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Override
     public CategoriaResponseDTO updateCategoria(Integer id, CategoriaRequestDTO categoriaRequestDTO) {
         Categoria existingCategoria = categoriaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Categoria no encontrada con ID: " + id));
-        existingCategoria.setNombre(categoriaRequestDTO.getNombre());
+                .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+
+        existingCategoria.setNombreCategoria(categoriaRequestDTO.getNombre()); // Corregido de setNombre a setNombreCategoria
+        existingCategoria.setActiva(categoriaRequestDTO.getActiva());
         Categoria updatedCategoria = categoriaRepository.save(existingCategoria);
         return categoriaMapper.toDto(updatedCategoria);
     }

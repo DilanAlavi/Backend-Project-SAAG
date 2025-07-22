@@ -42,8 +42,9 @@ public class MarcaServiceImpl implements MarcaService {
     @Override
     public MarcaResponseDTO updateMarca(Integer id, MarcaRequestDTO marcaRequestDTO) {
         Marca existingMarca = marcaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Marca no encontrada con ID: " + id));
-        existingMarca.setNombre(marcaRequestDTO.getNombre());
+                .orElseThrow(() -> new RuntimeException("Marca no encontrada"));
+
+        existingMarca.setNombreMarca(marcaRequestDTO.getNombre()); // Corregido de setNombre a setNombreMarca
         Marca updatedMarca = marcaRepository.save(existingMarca);
         return marcaMapper.toDto(updatedMarca);
     }

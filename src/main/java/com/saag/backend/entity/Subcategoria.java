@@ -23,4 +23,12 @@ public class Subcategoria {
 
     @Column(nullable = false)
     private Boolean activa = true;
+
+    @PrePersist
+    public void prePersist() {
+        if (activa == null) {
+            activa = true;
+        }
+    }
+
 }
