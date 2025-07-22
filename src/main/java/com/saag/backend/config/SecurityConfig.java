@@ -45,6 +45,7 @@ public class SecurityConfig {
                                 "/api/marcas/**",
                                 "/api/subcategorias/**",
                                 "/api/cotizaciones/**",
+                                "/health",
                                 "/error"
                         ).permitAll()
                         .anyRequest().permitAll()
