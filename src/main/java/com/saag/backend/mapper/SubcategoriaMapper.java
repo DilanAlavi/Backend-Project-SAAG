@@ -11,6 +11,8 @@ import org.mapstruct.factory.Mappers;
 public interface SubcategoriaMapper {
 
     @Mapping(target = "categoria.idCategoria", source = "idCategoria")
+    @Mapping(target = "activa", source = "activa")
+    @Mapping(target = "nombreSubcategoria", source = "nombre") // ✔ mapeo correcto
     Subcategoria toEntity(SubcategoriaRequestDTO subcategoriaRequestDTO);
 
     @Mapping(target = "idCategoria", source = "categoria.idCategoria")
