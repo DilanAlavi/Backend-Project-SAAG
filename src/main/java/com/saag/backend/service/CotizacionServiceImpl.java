@@ -14,11 +14,10 @@ import com.saag.backend.repository.ProductoRepository;
 import com.saag.backend.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.List; // Added missing import
 import java.util.stream.Collectors;
+import org.springframework.transaction.annotation.Transactional; // Added missing import
 
 @Service
 public class CotizacionServiceImpl implements CotizacionService {
@@ -48,6 +47,12 @@ public class CotizacionServiceImpl implements CotizacionService {
         cotizacion.setUsuario(usuario);
         cotizacion.setFechaCotizacion(LocalDateTime.now());
         cotizacion.setEstado(Cotizacion.Estado.PENDIENTE);
+        
+        // Calcular el total de la cotización basado en los detalles
+        double total = cotizacionRequestDTO.getDetalles().stream()
+                .mapToDouble(DetalleCotizacionRequestDTO::getSubtotal)
+                .sum();
+        cotizacion.setTotalCotizacion(total);
 
         Cotizacion savedCotizacion = cotizacionRepository.save(cotizacion);
 
