@@ -18,7 +18,10 @@ import jakarta.validation.Valid;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Schema(description = "DTO para crear una nueva cotización")
+@Schema(
+    description = "DTO para crear una nueva cotización",
+    example = "{\n  \"idUsuario\": 1,\n  \"nombreCompleto\": \"string\",\n  \"detalles\": [ { \"idProducto\": 1, \"cantidad\": 2, \"precioUnitario\": 10, \"subtotal\": 20 } ]\n}"
+)
 public class CotizacionRequestDTO {
     @NotNull(message = "El ID del usuario es requerido")
     @Schema(description = "ID del usuario que crea la cotización", example = "1")

@@ -12,7 +12,7 @@ public interface SubcategoriaMapper {
 
     @Mapping(target = "categoria.idCategoria", source = "idCategoria")
     @Mapping(target = "activa", source = "activa")
-    @Mapping(target = "nombreSubcategoria", source = "nombre") // ✔ mapeo correcto
+    @Mapping(target = "nombreSubcategoria", source = "nombreSubcategoria")
     Subcategoria toEntity(SubcategoriaRequestDTO subcategoriaRequestDTO);
 
     @Mapping(target = "idCategoria", source = "categoria.idCategoria")

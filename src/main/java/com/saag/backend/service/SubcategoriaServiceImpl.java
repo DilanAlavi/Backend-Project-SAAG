@@ -53,7 +53,7 @@ public class SubcategoriaServiceImpl implements SubcategoriaService {
         Categoria categoria = categoriaRepository.findById(subcategoriaRequestDTO.getIdCategoria())
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
 
-        existingSubcategoria.setNombreSubcategoria(subcategoriaRequestDTO.getNombre());
+        existingSubcategoria.setNombreSubcategoria(subcategoriaRequestDTO.getNombreSubcategoria());
         existingSubcategoria.setCategoria(categoria);
 
         Subcategoria updatedSubcategoria = subcategoriaRepository.save(existingSubcategoria);

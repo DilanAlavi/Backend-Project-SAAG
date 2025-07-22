@@ -14,10 +14,11 @@ import com.saag.backend.repository.ProductoRepository;
 import com.saag.backend.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
-import java.util.List; // Added missing import
+import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.transaction.annotation.Transactional; // Added missing import
 
 @Service
 public class CotizacionServiceImpl implements CotizacionService {
@@ -47,30 +48,33 @@ public class CotizacionServiceImpl implements CotizacionService {
         cotizacion.setUsuario(usuario);
         cotizacion.setFechaCotizacion(LocalDateTime.now());
         cotizacion.setEstado(Cotizacion.Estado.PENDIENTE);
-        
-        // Calcular el total de la cotización basado en los detalles
+
+        // Calcular el total antes de guardar
         double total = cotizacionRequestDTO.getDetalles().stream()
                 .mapToDouble(DetalleCotizacionRequestDTO::getSubtotal)
                 .sum();
         cotizacion.setTotalCotizacion(total);
 
-        Cotizacion savedCotizacion = cotizacionRepository.save(cotizacion);
-
+        // Construyo la lista de detalles ANTES de guardar la cotización
         List<DetalleCotizacion> detalles = cotizacionRequestDTO.getDetalles().stream()
                 .map(detalleDto -> {
                     Producto producto = productoRepository.findById(detalleDto.getIdProducto().longValue())
                             .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
                     DetalleCotizacion detalle = new DetalleCotizacion();
-                    detalle.setCotizacion(savedCotizacion);
                     detalle.setProducto(producto);
                     detalle.setCantidad(detalleDto.getCantidad());
                     detalle.setPrecioUnitario(detalleDto.getPrecioUnitario());
                     detalle.setSubtotal(detalleDto.getSubtotal());
+                    // No asigno cotizacion aquí, se asigna automáticamente por la relación bidireccional
                     return detalle;
                 }).collect(Collectors.toList());
 
-        detalleCotizacionRepository.saveAll(detalles);
-        savedCotizacion.setDetalles(detalles);
+        cotizacion.setDetalles(detalles);
+        detalles.forEach(d -> d.setCotizacion(cotizacion)); // Relación bidireccional
+
+        Cotizacion savedCotizacion = cotizacionRepository.save(cotizacion);
+
+        // detalleCotizacionRepository.saveAll(detalles); // Eliminado, lo maneja el cascade
 
         return cotizacionMapper.toDto(savedCotizacion);
     }
